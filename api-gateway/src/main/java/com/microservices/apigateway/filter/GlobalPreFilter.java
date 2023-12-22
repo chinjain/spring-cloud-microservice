@@ -25,9 +25,6 @@ public class GlobalPreFilter implements GlobalFilter,Ordered {
 		
 		HttpHeaders headers = exchange.getRequest().getHeaders();
 		Set<String> headerName = headers.keySet();
-		
-		
-		
 		return chain.filter(exchange);
 	}
 

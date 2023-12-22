@@ -84,7 +84,6 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 			isValid = false;
 		}
 		
-		System.out.println("End of validation");
 
 		return isValid;
 	}

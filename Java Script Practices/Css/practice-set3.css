@@ -1,0 +1,20 @@
+.bag{
+ background-color: lightgreen;
+ border: none;
+ padding-top:5px ;
+ padding-left: 15px;
+ padding-bottom: 5px;
+ padding-right: 15px;
+ border-radius: 5px;
+}
+
+.whish-list{
+  padding-top:5px ;
+ padding-left: 35px;
+ padding-bottom: 5px;
+ padding-right: 35px;
+
+ border: 2px solid black;
+ border-radius: 5px;
+
+}

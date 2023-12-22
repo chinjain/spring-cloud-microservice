@@ -79,7 +79,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 		SecretKey key = new SecretKeySpec(secretKey, SignatureAlgorithm.HS512.getJcaName());
 
 		String token = Jwts.builder().setSubject(userDetails.getUserID())
-				.setExpiration(Date.from(now.plusMillis(3600000))).setIssuedAt(Date.from(now))
+				.setExpiration(Date.from(now.plusMillis(Long.valueOf(environment.getProperty("token.expiry"))))).setIssuedAt(Date.from(now))
 				.signWith(key, SignatureAlgorithm.HS512).compact();
 
 		response.addHeader("token", "Bearer " + token);
