@@ -1,13 +1,13 @@
-package com.microservices.album;
+package com.photoapp.album.photoalbumapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AlbumApplication {
+public class PhotoAlbumApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AlbumApplication.class, args);
+		SpringApplication.run(PhotoAlbumApiApplication.class, args);
 	}
 
 }

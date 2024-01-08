@@ -9,5 +9,6 @@ public interface UserService extends UserDetailsService {
 	
 	public UserDto createUser(UserDto userDto) throws BadRequestException;
 	public UserDto getUserByEmail(String email);
+	public UserDto getUserByUserId(String id);
 
 }

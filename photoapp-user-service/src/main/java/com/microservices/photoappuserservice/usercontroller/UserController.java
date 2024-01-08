@@ -8,6 +8,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,8 @@ public class UserController {
 	}
 
 	@PostMapping("/save")
-	public ResponseEntity<UserResponseModel> createUser(@RequestBody UserModelRequest userModelRequest) throws BadRequestException {
+	public ResponseEntity<UserResponseModel> createUser(@RequestBody UserModelRequest userModelRequest)
+			throws BadRequestException {
 		ModelMapper mapper = new ModelMapper();
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -47,6 +49,16 @@ public class UserController {
 		responseModel.setCode("201");
 
 		return new ResponseEntity<UserResponseModel>(responseModel, HttpStatus.CREATED);
+	}
+
+	@GetMapping("/getUser/{userId}")
+	public ResponseEntity<com.microservices.photoappuserservice.ui.model.UserResponseModel> getUser(
+			@PathVariable("userId") String id) {
+		UserDto dto = userService.getUserByUserId(id);
+		com.microservices.photoappuserservice.ui.model.UserResponseModel userResponseModel = new ModelMapper().map(dto,
+				com.microservices.photoappuserservice.ui.model.UserResponseModel.class);
+		return new ResponseEntity<com.microservices.photoappuserservice.ui.model.UserResponseModel>(userResponseModel,
+				HttpStatus.OK);
 	}
 
 }

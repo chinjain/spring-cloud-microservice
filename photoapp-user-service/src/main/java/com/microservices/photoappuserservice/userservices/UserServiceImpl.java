@@ -1,31 +1,45 @@
 package com.microservices.photoappuserservice.userservices;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.microservices.photoappuserservice.model.UserDto;
 import com.microservices.photoappuserservice.model.UserEntity;
+import com.microservices.photoappuserservice.repository.AlbumServiceClient;
 import com.microservices.photoappuserservice.repository.UserRepository;
+import com.microservices.photoappuserservice.ui.model.AlbumResponseModel;
+
+import feign.FeignException;
 
 @Service
 public class UserServiceImpl implements UserService {
 
 	UserRepository userRepo;
 	BCryptPasswordEncoder encoder;
+//	RestTemplate restTemplate;
+	AlbumServiceClient albumClient;
 
 	@Autowired
-	public UserServiceImpl(@Lazy UserRepository userRepository, @Lazy BCryptPasswordEncoder encoder) {
+	public UserServiceImpl(@Lazy UserRepository userRepository, @Lazy BCryptPasswordEncoder encoder,
+			AlbumServiceClient albumClient) {
 		this.userRepo = userRepository;
 		this.encoder = encoder;
+//		this.restTemplate = restTemplate;
+		this.albumClient = albumClient;
 	}
 
 	@Override
@@ -79,6 +93,34 @@ public class UserServiceImpl implements UserService {
 			throw new UsernameNotFoundException(email);
 
 		return new ModelMapper().map(entity, UserDto.class);
+	}
+
+	@Override
+	public UserDto getUserByUserId(String userId) {
+		UserEntity entity = userRepo.findByUserId(userId);
+		if (entity == null) {
+			throw new UsernameNotFoundException("User Not Found");
+		}
+
+		UserDto userDto = new ModelMapper().map(entity, UserDto.class);
+
+		String albumUrl = "http://ALBUM-WS/users/" + userDto.getUserID() + "/albums";
+//		ResponseEntity<List<AlbumResponseModel>> albumResponse = restTemplate.exchange(albumUrl, HttpMethod.GET, null,
+//				new ParameterizedTypeReference<List<AlbumResponseModel>>() {
+//				});
+//		List<AlbumResponseModel> albumList = albumResponse.getBody();
+
+		List<AlbumResponseModel> albumList = null;
+		try {
+			albumList = albumClient.getAlbums(userDto.getUserID());
+		} catch (FeignException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		userDto.setAlbums(albumList);
+
+		return userDto;
 	}
 
 }

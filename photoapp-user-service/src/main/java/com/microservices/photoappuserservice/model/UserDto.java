@@ -1,10 +1,13 @@
 package com.microservices.photoappuserservice.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.microservices.photoappuserservice.ui.model.AlbumResponseModel;
 
 public class UserDto implements Serializable {
 
@@ -27,6 +30,7 @@ public class UserDto implements Serializable {
 	private String userID;
 
 	private String encryptedPassword;
+	private List<AlbumResponseModel> albums;
 
 	public UserDto() {
 		super();
@@ -94,6 +98,14 @@ public class UserDto implements Serializable {
 
 	public void setEncryptedPassword(String encryptedPassword) {
 		this.encryptedPassword = encryptedPassword;
+	}
+
+	public List<AlbumResponseModel> getAlbums() {
+		return albums;
+	}
+
+	public void setAlbums(List<AlbumResponseModel> albums) {
+		this.albums = albums;
 	}
 
 	@Override

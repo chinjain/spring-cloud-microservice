@@ -1,10 +1,10 @@
-package com.microservices.album;
+package com.photoapp.album.photoalbumapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AlbumApplicationTests {
+class PhotoAlbumApiApplicationTests {
 
 	@Test
 	void contextLoads() {

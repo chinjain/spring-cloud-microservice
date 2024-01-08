@@ -1,22 +1,24 @@
 package com.microservices.photoappuserservice;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 import com.microservices.photoappuserservice.model.UserModelRequest;
 import com.microservices.photoappuserservice.usercontroller.UserController;
 
+import feign.Logger;
+
 @SpringBootApplication
 @EnableDiscoveryClient
+@EnableFeignClients
 public class PhotoappUserServiceApplication implements CommandLineRunner {
 
 	@Autowired
@@ -29,6 +31,12 @@ public class PhotoappUserServiceApplication implements CommandLineRunner {
 	@Bean
 	public BCryptPasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	@LoadBalanced
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
 	}
 
 	@Override
@@ -48,6 +56,11 @@ public class PhotoappUserServiceApplication implements CommandLineRunner {
 //		System.out.println(configuration.getMsg());
 //		System.out.println("Value from Config server ->" + this.msg);
 
+	}
+
+	@Bean
+	Logger.Level feignLogger() {
+		return Logger.Level.FULL;
 	}
 
 }
